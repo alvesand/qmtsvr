@@ -1,0 +1,15 @@
+Title: qmtsvr:An API for fitting (Quasi)Multi-task support vector regression using the kernlab library
+Package: qmtsvr
+Imports: kernlab, foreach, doParallel
+Type: Package
+Version: 0.1.0
+Author: Anderson Alves
+Maintainer: Anderson A.C. Alves <alves.zootecnista@gmail.com>
+Description: This package uses data-augmentation for exploring the complementary information of correlated traits for genome-wide prediction of a primary trait of interest using the Support Vector Regression.
+    The main functionalities are:  
+    a) qmtsvr.dist: A function for computing Weighted Euclidean Distance Matrix (WEDM) based on an n x p numeric matrix (e.g. Matrix of SNPs).
+    b) qmtsvr.GA: Metaheuristic search of the QMTSVR hyperparameters using a Genetic Algorithm.
+    c) qmtsvr.fit: Fits a QMTSVR model given the user-defined hyperparameters.
+License: MIT
+Encoding: UTF-8
+LazyData: true
