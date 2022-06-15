@@ -52,7 +52,6 @@ u :     the power of the final EDM values (default = 2)
 values = rnorm(50, 0, 1)
 X = matrix(values, 5, 10)
 D = qmtsvr.dist (x=X)
-
 D
 ## Give more weigth for the collumns 1 and 5
 w = rep(1,50)
