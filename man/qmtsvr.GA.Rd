@@ -43,18 +43,30 @@ u     the power of the final EDM values (default = 2)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-## Create toy data
-values = rnorm(5000, 0, 1)
-X = matrix(values, 1000, 50)
-D = qmtsvr.dist (x=X)
+```{r setup}
+pheno = data_ex$mydata
+X = data_ex$QTL
 
-dim(D)
-head(D[,1:10])
+hyper_st = list(c("C",0.1,2,64), c("eps",0.001,0.1,64), c("b1",0.1,7,64))
 
-## The function is currently defined as
-function (x)
-{
-  }
+hyper_mt = list(c("C",0.1,2,64), c("eps",0.001,0.1,64),
+                c("b1",0.1,7,64), c("b2",0.1,7,64), c("b3",0.1,7,64),
+                c("b4",0.1,7,64), c("b5",0.1,7,64), c("b6",0.1,7,64),
+                c("r1",-0.9,0.9,64),c("r2",-0.9,0.9,64),c("r3",-0.9,0.9,64),
+                c("r4",-0.9,0.9,64),c("r5",-0.9,0.9,64), c("r6",-0.9,0.9,64))
+
+
+sol_svr = qmtsvr.GA(Y = pheno[100:300,5:7], X = X[100:300,], hyper = hyper_mt, vartype = "continuous", dopar = F,
+                    ngen = 30, popsize = 40, mut_rate = 0.04, cross_rate = 0.95,
+                    elitism = 2, cost = "cor", tsize = 5, val_pop = "cross", nfolds = 3,lambda=0,
+                    vardiag=T,MRCR = "dynamic", verbose = T)
+
+
+sol_svr$GA_parameters
+plot.GA(sol_svr)
+
+```
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory (show via RShowDoc("KEYWORDS")):
