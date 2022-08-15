@@ -561,8 +561,16 @@ qmtsvr.GA = function(Y, X, w = w, hyper,tgTrait, ngen, popsize, mut_rate, cross_
     a=utils::capture.output(fim-ini)
     cat('Time elapsed:', substr(a, 19, 100), '\n')}
   if (dopar == T){stopCluster(cl=my.cluster)}
+
+  GA_parameters = data.frame(Parameter = c('Number of generations','Population size',
+                                           'Mutation Rate','Crossing-over Rate',
+                                           'Tournament size','Elitism',"MRCR"),
+                                          value = c(ngen, popsize, mut_rate,cross_rate,
+                                                    tsize,elitism,MRCR))
+
   return (list(set_hyper = best_hyper, actual_population = pop, population_scores = score,
-               best_index = best[1], pop_average = pop_average, best_performance = best_average))
+               best_index = best[1], pop_average = pop_average, best_performance = best_average,
+               GA_parameters = GA_parameters))
 
 }
 
@@ -590,6 +598,21 @@ welcome = function(){
  #------------------------------------------------------#
       \n')}
 
+# ------ Plot function -------------------------------------#
+plot.GA = function(GA_obj)
+{
+  a = GA_obj$pop_average
+  b = GA_obj$best_performance
+  plot(a~seq(0,GA_obj$GA_parameters[1,2]), pch = 19, type = "o", lty = 2, ylim = c(min(a,b),max(a,b)), xlab = "Generations",
+       ylab = "Fitness", col = rgb(0.6,0.2,0.10,0.5),bty='l')
+  grid(nx = NULL, ny = NULL, lty = 2, col = rgb(0.5,0.5,0.5,0.2), lwd = 2)
+  par(new = TRUE)
+  plot(a~seq(0,GA_obj$GA_parameters[1,2]), pch = 19, type = "o", lty = 2, ylim = c(min(a,b),max(a,b)), xlab = "Generations",
+       ylab = "Fitness", col = rgb(0.6,0.2,0.10,0.5), bty = "l")
+  points(b~seq(0,GA_obj$GA_parameters[1,2]), type = "o",  lty = 2,pch = 19,
+         col = rgb(0.1,0.3,0.7,0.7))
+
+}
 
 #--------- Requirement checking!!! ---------------------------------#
 caution = function(){
