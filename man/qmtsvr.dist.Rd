@@ -6,22 +6,18 @@
 }
 \description{
 %%  ~~ This function uses a numeric n x p Matrix X (e.g. marker matrix)
-Function used for computing an n x n Euclidean Distance Matrix (EDM). The function can also accomodate different weighting factors for the variables in X.
+This function is used for computing an \emph{n x n} Euclidean Distance Matrix (EDM). It can also accomodate different weighting factors for the variables in X.
 }
 \usage{
 qmtsvr.dist(x=X, w=NULL, u=2)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-x :    an n x p matrix
-
-w :     a vector of weights for computing the Euclidean distances (optional)
-
-u :     the power of the final EDM values (default = 2)
-
-verbose :     prints the time elapsed for computing the EDM (default = F)
-
-vardiag :      if vardiag is set True, the zeros in the diagonal of the EDM will be replaced with 1-(d/(sqrt(d)*sqrt(m)), in which d is the diagonal of tcrossprod(x) and m is the median of this diagonal.This quantity yields a variation around 1 for the diagonal elements of the RBF kernel computed as K = exp(-b*EDM), where b is a hyperparameter constant. The diagonal elements in K correlate with the diagonal elements from the G matrix presented in VanRaden, 2008. (default = F)
+\item{x}{A \emph{n x p} matrix}
+\item{w}{A vector of size \emph{p} containing the weighting factors to be assigned to the features in \bold{X} during the EDM computation (\emph{Optional}).}
+\item{u}{the power of the final EDM values (\emph{default =} 2).}
+\item{verbose}{A logical argument indicating if the time elapsed for computing the EDM must be printed (\emph{default = F})}
+\item{vardiag}{A logical argument specifying if EDM diagonal elements must vary (\emph{default=}\code{F}). If \code{vardiag}=\code{T}, the zero values in the diagonal of the EDM will be replaced with: \deqn{1-(\frac{d}{\sqrt d * \sqrt m})} in which \bold{d} is the diagonal of \eqn{XX^T} and \emph{m} is the median of \bold{d}.}
 {
 %%     ~~Describe \code{x} here~~
 }
@@ -40,7 +36,9 @@ vardiag :      if vardiag is set True, the zeros in the diagonal of the EDM will
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Anderson Alves (carvalhoalve@wisc.edu)
+
+webpage: \url{http://alvesand.netlify.app/}
 }
 \note{
 %%  ~~further notes~~
