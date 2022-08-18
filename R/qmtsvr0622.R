@@ -564,9 +564,9 @@ qmtsvr.GA = function(Y, X, w = w, hyper,tgTrait, ngen, popsize, mut_rate, cross_
 
   GA_parameters = data.frame(Parameter = c('Number of generations','Population size',
                                            'Mutation Rate','Crossing-over Rate',
-                                           'Tournament size','Elitism',"MRCR"),
+                                           'Tournament size','Elitism',"MRCR","Cost"),
                                           value = c(ngen, popsize, mut_rate,cross_rate,
-                                                    tsize,elitism,MRCR))
+                                                    tsize,elitism,MRCR,cost))
 
   return (list(set_hyper = best_hyper, actual_population = pop, population_scores = score,
                best_index = best[1], pop_average = pop_average, best_performance = best_average,
@@ -603,6 +603,7 @@ plot.GA = function(GA_obj)
 {
   a = GA_obj$pop_average
   b = GA_obj$best_performance
+
   plot(a~seq(0,GA_obj$GA_parameters[1,2]), pch = 19, type = "o", lty = 2, ylim = c(min(a,b),max(a,b)), xlab = "Generations",
        ylab = "Fitness", col = rgb(0.6,0.2,0.10,0.5),bty='l')
   grid(nx = NULL, ny = NULL, lty = 2, col = rgb(0.5,0.5,0.5,0.2), lwd = 2)
@@ -611,7 +612,10 @@ plot.GA = function(GA_obj)
        ylab = "Fitness", col = rgb(0.6,0.2,0.10,0.7), bty = "l")
   points(b~seq(0,GA_obj$GA_parameters[1,2]), type = "o",  lty = 2,pch = 19,
          col = rgb(0.1,0.3,0.7,0.7))
-  legend("bottomright", legend=c("Population Average", "Best Fitness"),
+
+  place = "bottomright"
+  if(GA_obj$GA_parameters[8,2]!="cor"){place="topright"}
+  legend(place, legend=c("Population Average", "Best Fitness"),
          col=c(rgb(0.6,0.2,0.10,0.5), rgb(0.1,0.3,0.7,0.7)),
          pch=c(19,19), cex=0.8)
 }
