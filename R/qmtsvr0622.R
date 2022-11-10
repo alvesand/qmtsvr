@@ -209,7 +209,7 @@ qmtsvr.fit = function(Y, X, w, set_hyper, D, verbose, vardiag){
 #--------------------------------------------------------------------#
 #----------------- GA for the QMTSVR optimization -------------------#
 #--------------------------------------------------------------------#
-qmtsvr.GA = function(Y, X, w = w, hyper,tgTrait, ngen, popsize, mut_rate, cross_rate, elitism, vartype = vartype,
+qmtsvr.GA = function(Y, X, D, w = w, hyper,tgTrait, ngen, popsize, mut_rate, cross_rate, elitism, vartype = vartype,
                      verbose, cost, nfolds, val_pop, tsize, custom_val, k, MRCR, vardiag, lambda, dopar){
   if(missing(dopar)==T){dopar=F}
   if(typeof(dopar)!="logical"){stop("Error ... dopar parameter must be T or F")}
@@ -221,10 +221,11 @@ qmtsvr.GA = function(Y, X, w = w, hyper,tgTrait, ngen, popsize, mut_rate, cross_
   require ("kernlab")
 
   Y = Y
-  X = X
-  N = nrow(X)
-  nsnp = ncol(X)
-  if(missing(w)==T){w=NULL}
+  if(missing(X)==T){X=NULL}
+  else{X = X; nsnp = ncol(X)}
+  N = nrow(Y)
+
+
   if(missing(tgTrait)==T){tgTrait=1}
   if(missing(verbose)==T){verbose=NULL}
   if(missing(nfolds)==T){nfolds=NULL}
@@ -325,23 +326,26 @@ qmtsvr.GA = function(Y, X, w = w, hyper,tgTrait, ngen, popsize, mut_rate, cross_
   bin_size = 0
   for (i in 1:length(hyperspace)){bin_size = bin_size+log(length(hyperspace[[i]]),2)}
   n_par = length(hyper_dic)
-  if(verbose==T){
-    cat('Computing EDMs...', '\n')
-    ini = Sys.time()}
+
 
   #Building the EDMs
-  if(length(w)==0){
-    D = list()
-    D[[1]] = qmtsvr.dist(X, verbose = F, scale = T, u = 2, vardiag = vardiag); rm(X)
-  }else{
-    D = list()
-    for(j in 1:nb){
-      D[[j]] = qmtsvr.dist(X,w[[j]],verbose = F, scale = T, u = 2, vardiag=vardiag)};rm(X)}
-  if(verbose==T){
-    fim = Sys.time()
-    cat('Done...', '\n')
-    a=utils::capture.output(fim-ini)
-    cat('Time elapsed:', substr(a, 19, 100), '\n')}
+  if (missing(D)==T){
+    if(verbose==T){
+      cat('Computing EDMs...', '\n')
+      ini = Sys.time()}
+    if(length(w)==0){
+      D = list()
+      D[[1]] = qmtsvr.dist(X, verbose = F, scale = T, u = 2, vardiag = vardiag); rm(X)
+    }else{
+      D = list()
+      for(j in 1:nb){
+        D[[j]] = qmtsvr.dist(X,w[[j]],verbose = F, scale = T, u = 2, vardiag=vardiag)};rm(X)}
+    if(verbose==T){
+      fim = Sys.time()
+      cat('Done...', '\n')
+      a=utils::capture.output(fim-ini)
+      cat('Time elapsed:', substr(a, 19, 100), '\n')}
+  }
   #---------------------------- End of subroutine ----------------------------------------#
 
   #----------------------------------------------------------------------------------------#
@@ -601,11 +605,11 @@ welcome = function(){
 # ------ Plot function -------------------------------------#
 plot.GA = function(GA_obj)
 {
-  
+
   a = GA_obj$pop_average
   b = GA_obj$best_performance
   GA_parameters = GA_obj$GA_parameters
-  
+
   plot(a~seq(0,as.numeric(as.character(GA_parameters[1,2]))), pch = 19, type = "o", lty = 2, ylim = c(min(a,b),max(a,b)), xlab = "Generations",
        ylab = "Fitness", col = rgb(0.6,0.2,0.10,0.5),bty='l')
   grid(nx = NULL, ny = NULL, lty = 2, col = rgb(0.5,0.5,0.5,0.2), lwd = 2)
@@ -614,7 +618,7 @@ plot.GA = function(GA_obj)
        ylab = "Fitness", col = rgb(0.6,0.2,0.10,0.7), bty = "l")
   points(b~seq(0,as.numeric(as.character(GA_parameters[1,2]))), type = "o",  lty = 2,pch = 19,
          col = rgb(0.1,0.3,0.7,0.7))
-  
+
   place = "bottomright"
   if(GA_parameters[8,2]!="cor"){place="topright"}
   legend(place, legend=c("Population Average", "Best Fitness"),

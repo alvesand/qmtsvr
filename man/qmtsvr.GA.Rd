@@ -7,13 +7,15 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-qmtsvr.GA(Y = Y, X = X, hyper = hyper, ngen = ngen, popsize = popsize, mut_rate = mut_rate, cross_rate = cross_rate, cost = "cor", tsize = tsize, val_pop = "cross", nfolds = 3)
+qmtsvr.GA(Y = Y, X = X, w = NULL, D = NULL, hyper = hyper, ngen = ngen, popsize = popsize, mut_rate = mut_rate, cross_rate = cross_rate, cost = "cor", tsize = tsize, val_pop = "cross", nfolds = 3)
 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
 \item{Y}{A \emph{N x t} matrix of response variables, where N is the number of observations and t is the number of traits (missing values are coded as NA).}
 \item{X}{A \emph{N x p} matrix of features (\emph{e.g.,} SNP markers ), in which \emph{p} is the number of features.}
+\item{w}{A list containing the trait-specific and trait-common weighting factors to be assigned to the features in \bold{X} during the EDM computation (\emph{Optional}).}
+\item{D}{a list with all pre-computed EDM. It can be passed as an argument alternatively to the matrix \bold{X} (\emph{Optional}).}
 \item{hyper}{A \emph{list} object containing the name specification and range  for each hyperparameter to be optimized in the QMTSVR model}
 \item{ngen}{The number of generations to run in the Genetic Algorithm.}
 \item{popsize}{The population size (PS) to grow, it indicates the number of models tested per generation.}
